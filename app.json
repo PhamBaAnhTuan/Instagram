@@ -2,12 +2,13 @@
   "expo": {
     "name": "Instagram",
     "slug": "Instagram",
+    "scheme": "Instagram",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/icon/instagram.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/icon/instagram.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -22,6 +23,9 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-router"
+    ]
   }
 }
