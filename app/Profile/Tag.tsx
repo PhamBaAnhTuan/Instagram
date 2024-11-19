@@ -3,32 +3,36 @@ import React from 'react';
 // Icons
 import { FontAwesome, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 // Context
-import { useTheme } from '../../context/ThemeContext';
+import { useStoreContext } from '../../context/Context';
 
 const Tag = () => {
-  const { theme } = useTheme();
+  // Redux
+  const { router, useAuthSelector, useThemeSelector } = useStoreContext();
+  const { isAuthenticated, user, posts } = useAuthSelector;
+  const { theme } = useThemeSelector;
+  const color = theme.colors;
   return (
-    <SafeAreaView style={[styles.safeView, { backgroundColor: theme.bgc }]}>
+    <SafeAreaView style={[styles.safeView, { backgroundColor: color.background }]}>
 
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container2}>
-          <TouchableOpacity style={[styles.wrap2, { borderColor: theme.text }]}>
-            <Ionicons style={styles.icon2} name="copy" size={19} color={theme.text} />
+          <TouchableOpacity style={[styles.wrap2, { borderColor: color.text }]}>
+            <Ionicons style={styles.icon2} name="copy" size={19} color={color.text} />
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.wrap2, { borderColor: theme.text }]}>
-            <MaterialCommunityIcons style={styles.icon2} name="play-box-multiple" size={20} color={theme.text} />
+          <TouchableOpacity style={[styles.wrap2, { borderColor: color.text }]}>
+            <MaterialCommunityIcons style={styles.icon2} name="play-box-multiple" size={20} color={color.text} />
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.wrap2, { borderColor: theme.text }]}>
-            <Ionicons style={styles.icon2} name="copy" size={19} color={theme.text} />
+          <TouchableOpacity style={[styles.wrap2, { borderColor: color.text }]}>
+            <Ionicons style={styles.icon2} name="copy" size={19} color={color.text} />
           </TouchableOpacity>
         </View>
 
         <View style={styles.container2}>
-          <TouchableOpacity style={[styles.wrap2, { borderColor: theme.text }]}>
-            <Ionicons style={styles.icon2} name="copy" size={19} color={theme.text} />
+          <TouchableOpacity style={[styles.wrap2, { borderColor: color.text }]}>
+            <Ionicons style={styles.icon2} name="copy" size={19} color={color.text} />
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.wrap2, { borderColor: theme.text }]}>
-            <Ionicons style={styles.icon2} name="copy" size={19} color={theme.text} />
+          <TouchableOpacity style={[styles.wrap2, { borderColor: color.text }]}>
+            <Ionicons style={styles.icon2} name="copy" size={19} color={color.text} />
           </TouchableOpacity>
         </View>
       </ScrollView>

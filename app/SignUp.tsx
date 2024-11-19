@@ -1,57 +1,58 @@
 import { Dimensions, Image, Platform, SafeAreaView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 // Context
-import { useTheme } from '../context/ThemeContext';
-import { useAuth } from '../context/AuthContext';
+import { useStoreContext } from '../context/Context';
 // Icons
 import { Entypo } from '@expo/vector-icons';
 
 const SignIn = () => {
-  const { theme } = useTheme();
-  const {router} = useAuth();
+  const { router, useAuthSelector, useThemeSelector } = useStoreContext();
+  const { isAuthenticated } = useAuthSelector;
+  const { theme } = useThemeSelector;
+  const color = theme.colors;
 
   return (
-    <SafeAreaView style={[styles.safeView, { backgroundColor: theme.bgc }]}>
+    <SafeAreaView style={[styles.safeView, { backgroundColor: color.background }]}>
 
-      <View style={styles.container1}>
-        <Image source={require('../assets/icon/InstagramText.png')} />
+      <View style={styles.logoContainer}>
+        <Text style={{ fontSize: 37, fontWeight: 'bold', color: color.text, fontFamily: 'serif' }}>Instagram</Text>
       </View>
 
-      <View style={styles.container2}>
+      <View style={styles.inputContainer}>
         <TextInput
-          style={[styles.textInput, { backgroundColor: theme.bgc, borderColor: theme.text }]}
+          style={[styles.textInput, { backgroundColor: color.onText, borderColor: color.text, color: color.text }]}
           placeholder='Fullname'
           keyboardType='default'
-          placeholderTextColor={theme.text}
+          placeholderTextColor={color.disabled}
         />
         <TextInput
-          style={[styles.textInput, { backgroundColor: theme.bgc, borderColor: theme.text }]}
+          style={[styles.textInput, { backgroundColor: color.onText, borderColor: color.text, color: color.text }]}
           placeholder='Email'
           keyboardType='email-address'
-          placeholderTextColor={theme.text}
+          placeholderTextColor={color.disabled}
         />
         <TextInput
-          style={[styles.textInput, { backgroundColor: theme.bgc, borderColor: theme.text }]}
+          style={[styles.textInput, { backgroundColor: color.onText, borderColor: color.text, color: color.text }]}
           placeholder='Password'
           keyboardType='default'
-          placeholderTextColor={theme.text}
+          placeholderTextColor={color.disabled}
           secureTextEntry={true}
         />
       </View>
 
-      <TouchableOpacity style={styles.container4}>
-        <Text style={[styles.text4, {color: theme.text}]}>Sign up</Text>
+      <TouchableOpacity style={styles.signupBtnContainer}>
+        <Text style={[styles.text4, { color: color.onText }]}>Sign up</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.container5}>
+      <TouchableOpacity style={styles.signinWithFacebookContainer}>
         <Entypo name="facebook" size={24} color="#3797ef" />
-        <Text style={[styles.text5, {color: theme.text}]}>Log in with Facebook</Text>
+        <Text style={[styles.text5, { color: color.text }]}>Log in with Facebook</Text>
       </TouchableOpacity>
 
-      <View style={styles.container6}>
-        <Text style={[styles.text6, {color: theme.text}]}>Have an account yet? </Text>
+      <View style={styles.otherMethodContainer}>
+        <Text style={[styles.text6, { color: color.text }]}>Have an account yet? </Text>
         <TouchableOpacity onPress={() => router.push('SignIn')}>
-          <Text style={[styles.text6, {color: '#3797ef'}]}>Log in</Text>
+          <Text style={[styles.text6, { color: '#3797ef' }]}>Log in</Text>
         </TouchableOpacity>
       </View>
 
@@ -70,7 +71,7 @@ const styles = StyleSheet.create({
   },
 
 
-  container1: {
+  logoContainer: {
     height: 220,
     width: '100%',
     // borderWidth: 1,
@@ -80,7 +81,7 @@ const styles = StyleSheet.create({
   },
 
 
-  container2: {
+  inputContainer: {
     height: 'auto',
     width: '100%',
     // borderWidth: 1,
@@ -110,7 +111,7 @@ const styles = StyleSheet.create({
   },
 
 
-  container4: {
+  signupBtnContainer: {
     height: 50,
     width: 330,
     // borderWidth: 1,
@@ -127,7 +128,7 @@ const styles = StyleSheet.create({
   },
 
 
-  container5: {
+  signinWithFacebookContainer: {
     height: 40,
     width: 200,
     // borderWidth: 1,
@@ -137,7 +138,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 20
   },
-  text5:{
+  text5: {
     fontSize: 13,
     fontWeight: 'bold',
     color: '#3797ef',
@@ -145,7 +146,7 @@ const styles = StyleSheet.create({
   },
 
 
-  container6:{
+  otherMethodContainer: {
     height: 30,
     width: '100%',
     flexDirection: 'row',
@@ -153,7 +154,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 90
   },
-  text6:{
+  text6: {
     fontSize: 13,
     fontWeight: 'bold',
     opacity: 0.9

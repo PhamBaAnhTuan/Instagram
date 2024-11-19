@@ -3,29 +3,33 @@ import React from 'react';
 // Icons
 import { Feather, Ionicons, Entypo } from '@expo/vector-icons';
 // Context
-import { useTheme } from '../../context/ThemeContext';
-import { useAuth } from '../../context/AuthContext';
+import { useStoreContext } from '../../context/Context';
 
 interface Props {
    userImg: any,
    userName: string,
    mess: string,
    time: number,
-   online: boolean
+   online: boolean,
+   onPress: any
 }
 const ChatList = (props: Props) => {
-   const { theme } = useTheme();
+   // Redux
+   const { router, useAuthSelector, useThemeSelector } = useStoreContext();
+   const { isAuthenticated, user, posts } = useAuthSelector;
+   const { theme } = useThemeSelector;
+   const color = theme.colors;
    return (
-      <TouchableOpacity style={styles.container}>
+      <TouchableOpacity style={styles.container} onPress={props.onPress}>
          <View style={styles.wrap}>
             <Image style={styles.userImg} source={props.userImg} resizeMode='cover' />
 
             <View style={styles.wrap1}>
-               <Text style={[styles.text1, { color: theme.text }]}>{props.userName}</Text>
+               <Text style={[styles.text1, { color: color.text }]}>{props.userName}</Text>
                <View style={styles.box1}>
-                  <Text style={[styles.mess, { color: theme.text }]}>{props.mess}</Text>
-                  <Text style={{ color: theme.text }}> • </Text>
-                  <Text style={[styles.mess, { color: theme.text }]}>{props.time} minutes ago</Text>
+                  <Text style={[styles.mess, { color: color.text }]}>{props.mess}</Text>
+                  <Text style={{ color: color.text }}> • </Text>
+                  <Text style={[styles.mess, { color: color.text }]}>{props.time} minutes ago</Text>
                </View>
             </View>
          </View>

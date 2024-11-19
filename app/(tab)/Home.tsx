@@ -1,4 +1,6 @@
-import { Dimensions, Image, Platform, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Image, Platform, SafeAreaView,
+   ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View 
+} from 'react-native';
 import React from 'react';
 // Icons
 import { Feather, FontAwesome5 } from '@expo/vector-icons';
@@ -6,32 +8,32 @@ import { Feather, FontAwesome5 } from '@expo/vector-icons';
 import StoryCard from '../../components/home/StoryCard';
 import Post from '../../components/home/Post';
 // Context
-import { useTheme } from '../../context/ThemeContext';
-import { useAuth } from '../../context/AuthContext';
+import { useStoreContext } from '../../context/Context';
 
 const Home = () => {
-   // Theme
-   const { theme, getTheme } = useTheme();
-   const {router} = useAuth();
+   const { router, useAuthSelector, useThemeSelector } = useStoreContext();
+   const { isAuthenticated, user, posts } = useAuthSelector;
+   const { theme } = useThemeSelector;
+   const color = theme.colors;
    return (
-      <SafeAreaView style={[styles.safeView, { backgroundColor: theme.bgc }]}>
+      <SafeAreaView style={[styles.safeView, {backgroundColor: color.background}]}>
 
          <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={styles.container1}>
-               <Image style={styles.title1} source={require('../../assets/icon/InstagramText.png')} />
+            <View style={styles.headerContainer}>
+               <Image style={styles.title} source={require('../../assets/icon/InstagramText.png')} />
 
-               <View style={styles.wrap1}>
-                  <TouchableOpacity onPress={getTheme}>
-                     <Feather name="heart" size={24} color={theme.text} />
+               <View style={styles.headerRight}>
+                  <TouchableOpacity onPress={undefined}>
+                     <Feather name="heart" size={24} color={color.text} />
                   </TouchableOpacity>
-                  
-                  <TouchableOpacity onPress={() => router.push('Chat')} >
-                     <FontAwesome5 name="facebook-messenger" size={23} color={theme.text} />
+
+                  <TouchableOpacity onPress={() => router.push('Chat/Chat')} >
+                     <FontAwesome5 name="facebook-messenger" size={23} color={color.text} />
                   </TouchableOpacity>
                </View>
             </View>
 
-            <View style={styles.container2}>
+            <View style={styles.storyContainer}>
                <ScrollView horizontal={true} >
                   <StoryCard
                      img={require('../../assets/home/image/TuanPham.jpg')}
@@ -60,7 +62,7 @@ const Home = () => {
                </ScrollView>
             </View>
 
-            <View style={styles.container3}>
+            <View style={styles.postContainer}>
                <Post
                   userImg={require('../../assets/home/image/Kendrick.jpg')}
                   userName='Kendrick Lamar'
@@ -97,7 +99,7 @@ const styles = StyleSheet.create({
    },
 
 
-   container1: {
+   headerContainer: {
       height: 60,
       width: '100%',
       // borderWidth: 1,
@@ -107,13 +109,13 @@ const styles = StyleSheet.create({
       paddingHorizontal: 20
    },
 
-   title1: {
+   title: {
       resizeMode: 'cover',
       height: 30,
       width: 110
    },
 
-   wrap1: {
+   headerRight: {
       height: '100%',
       width: 70,
       // borderWidth: 1,
@@ -123,14 +125,14 @@ const styles = StyleSheet.create({
    },
 
 
-   container2: {
+   storyContainer: {
       height: 110,
       width: '100%',
       // borderWidth: 1
    },
 
 
-   container3: {
+   postContainer: {
       height: 'auto',
       width: '100%',
       marginTop: 10

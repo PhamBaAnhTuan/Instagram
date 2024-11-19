@@ -2,13 +2,19 @@ import { useEffect } from 'react';
 // Router
 import { Slot, useSegments } from 'expo-router';
 // Context
-import { AuthContextProvider, useAuth } from '../context/AuthContext';
-import { ThemeContextProvider, useTheme } from '../context/ThemeContext';
+import { ContextProvider, useStoreContext } from '../context/Context';
+// Redux toolkit
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import { store, persistor } from '../redux/store/store';
+import { StatusBar } from 'expo-status-bar';
 
 const MainLayout = () => {
-  const { router, isAuthenticated } = useAuth();
+  const { router, useAuthSelector, useThemeSelector } = useStoreContext();
+  const { isAuthenticated } = useAuthSelector;
+  const { theme } = useThemeSelector;
+  const color = theme.colors;
   const segments = useSegments();
-  const { theme } = useTheme();
 
   useEffect(() => {
     if (typeof isAuthenticated == 'undefined') return;
@@ -20,16 +26,23 @@ const MainLayout = () => {
       router.replace('SignIn');
     }
   }, [isAuthenticated])
-  return <Slot />
+  return (
+    <>
+      <Slot />
+      <StatusBar backgroundColor={color.disabled}></StatusBar>
+    </>
+  )
 };
 
 const RootLayout = () => {
   return (
-    <AuthContextProvider>
-      <ThemeContextProvider>
-        <MainLayout />
-      </ThemeContextProvider>
-    </AuthContextProvider>
+    <Provider store={store}>
+      <PersistGate persistor={persistor}>
+        <ContextProvider>
+          <MainLayout />
+        </ContextProvider>
+      </PersistGate>
+    </Provider>
   );
 };
 

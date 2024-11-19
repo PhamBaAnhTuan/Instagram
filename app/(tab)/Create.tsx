@@ -1,15 +1,17 @@
 import { Dimensions, Platform, SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 // Context
-import { useTheme } from '../../context/ThemeContext';
+import { useStoreContext } from '../../context/Context';
 
 const Create = () => {
-  const {theme} = useTheme();
+  const {useAuthSelector, useThemeSelector} = useStoreContext();
+  const {theme} = useThemeSelector;
+  const color = theme.colors;
   return (
-    <SafeAreaView style={[styles.safeView, {backgroundColor: theme.bgc}]}>
+    <SafeAreaView style={[styles.safeView, {backgroundColor: color.background}]}>
 
       <View style={styles.header}>
-        <Text style={[styles.text1, {color: theme.text}]}>Create</Text>
+        <Text style={[styles.text1, {color: color.text}]}>Create</Text>
       </View>
 
     </SafeAreaView>

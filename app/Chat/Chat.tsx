@@ -1,83 +1,91 @@
 import { Dimensions, Image, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import React from 'react';
+import { useNavigation } from 'expo-router';
 // Icons
 import { Feather, Ionicons, Entypo } from '@expo/vector-icons';
 // Context
-import { useTheme } from '../context/ThemeContext';
-import { useAuth } from '../context/AuthContext';
-import ChatList from '../components/chat/ChatList';
+import { useStoreContext } from '../../context/Context';
+import ChatList from '../../components/chat/ChatList';
 
 const Chat = () => {
-   // Theme
-   const { theme, getTheme } = useTheme();
-   const { router } = useAuth();
+   // Redux
+   const { router, useAuthSelector, useThemeSelector } = useStoreContext();
+   const { isAuthenticated, user, posts } = useAuthSelector;
+   const { theme } = useThemeSelector;
+   const color = theme.colors;
+   // 
+   const navigation = useNavigation();
    return (
-      <SafeAreaView style={[styles.safeView, { backgroundColor: theme.bgc }]}>
+      <SafeAreaView style={[styles.safeView, { backgroundColor: color.background }]}>
 
          <View style={styles.header}>
             <View style={styles.wrapA}>
-               <TouchableOpacity onPress={() => router.back()}>
-                  <Ionicons style={styles.backIcon} name="arrow-back-outline" size={24} color={theme.text} />
+               <TouchableOpacity onPress={() => router.replace('Home')}>
+                  <Ionicons style={styles.backIcon} name="arrow-back-outline" size={24} color={color.text} />
                </TouchableOpacity>
 
                <TouchableOpacity style={styles.userNameWrap}>
-                  <Text style={[styles.userName, { color: theme.text }]}>phbatuan</Text>
-                  <Entypo name="chevron-small-down" size={24} color={theme.text} />
+                  <Text style={[styles.userName, { color: color.text }]}>phbatuan</Text>
+                  <Entypo name="chevron-small-down" size={24} color={color.text} />
                </TouchableOpacity>
             </View>
 
             <View style={styles.wrapB}>
                <TouchableOpacity style={styles.icon}>
-                  <Ionicons name="chatbubbles-outline" size={24} color={theme.text} />
+                  <Ionicons name="chatbubbles-outline" size={24} color={color.text} />
                </TouchableOpacity>
                <TouchableOpacity style={styles.icon}>
-                  <Ionicons name="create-outline" size={24} color={theme.text} />
+                  <Ionicons name="create-outline" size={24} color={color.text} />
                </TouchableOpacity>
             </View>
          </View>
 
          <View style={styles.searchContainer}>
-            <Feather style={styles.searchIcon} name="search" size={20} color={theme.bgc} />
+            <Feather style={styles.searchIcon} name="search" size={20} color={color.background} />
             <KeyboardAvoidingView behavior='padding'>
                <TextInput
                   style={styles.searchInput}
                   placeholder='Search'
-                  placeholderTextColor={theme.bgc}
+                  placeholderTextColor={color.background}
                />
             </KeyboardAvoidingView>
          </View>
 
          <View style={styles.container1}>
-            <Text style={[styles.text1, {color: theme.text}]}>Message</Text>
+            <Text style={[styles.text1, { color: color.text }]}>Message</Text>
             <TouchableOpacity>
-               <Text style={[styles.text1, {color: 'blue'}]}>Message waiting</Text>
+               <Text style={[styles.text1, { color: 'blue' }]}>Message waiting</Text>
             </TouchableOpacity>
          </View>
 
          <View style={styles.container2}>
-            <ChatList 
-               userImg={require('../assets/home/image/Kendrick.jpg')}
+            <ChatList
+               onPress={() => router.push('Chat/ChatDetail')}
+               userImg={require('../../assets/home/image/Kendrick.jpg')}
                userName='Kendrick Lamar'
                mess='Wassap asian boiz!'
                time={2}
                online={true}
             />
-            <ChatList 
-               userImg={require('../assets/home/image/robe.jpg')}
+            <ChatList
+               onPress={() => router.push('Chat/ChatDetail')}
+               userImg={require('../../assets/home/image/robe.jpg')}
                userName='Hustlang Robber'
                mess='Can u come to my stu?'
                time={19}
                online={true}
             />
-            <ChatList 
-               userImg={require('../assets/home/image/Zeros.jpg')}
+            <ChatList
+               onPress={() => router.push('ChatDetail')}
+               userImg={require('../../assets/home/image/Zeros.jpg')}
                userName='Zeros'
                mess='e bro, duo k?'
                time={3}
                online={false}
             />
-            <ChatList 
-               userImg={require('../assets/home/image/Jcole.jpg')}
+            <ChatList
+               onPress={() => router.push('ChatDetail')}
+               userImg={require('../../assets/home/image/Jcole.jpg')}
                userName='J.Cole'
                mess='Let hang out bro!'
                time={27}
@@ -101,12 +109,13 @@ const styles = StyleSheet.create({
 
 
    header: {
-      height: 60,
+      height: 50,
       width: '100%',
       // borderWidth: 1,
       flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'space-around',
+      justifyContent: 'space-between',
+      paddingHorizontal: 15
    },
 
    wrapA: {
@@ -122,7 +131,7 @@ const styles = StyleSheet.create({
       // marginLeft: 10
    },
 
-   userNameWrap:{
+   userNameWrap: {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
@@ -157,11 +166,11 @@ const styles = StyleSheet.create({
 
 
    searchContainer: {
-      height: 40,
-      width: 330,
+      height: 37,
+      width: '95%',
       // borderWidth: 1,
       borderRadius: 10,
-      marginVertical: 10,
+      marginVertical: 5,
       flexDirection: 'row',
       alignItems: 'center',
       alignSelf: 'center',
@@ -176,13 +185,13 @@ const styles = StyleSheet.create({
    },
    searchInput: {
       height: 40,
-      width: 280,
+      width: 350,
       // borderWidth: 1,
       borderRadius: 10,
    },
 
 
-   container1:{
+   container1: {
       height: 40,
       width: '100%',
       flexDirection: 'row',
@@ -190,13 +199,13 @@ const styles = StyleSheet.create({
       justifyContent: 'space-between',
       paddingHorizontal: 15
    },
-   text1:{
+   text1: {
       fontSize: 15,
       fontWeight: 'bold',
    },
 
 
-   container2:{
+   container2: {
       height: 'auto',
       width: '100%',
       // borderWidth: 1,

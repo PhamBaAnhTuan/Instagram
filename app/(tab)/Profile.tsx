@@ -1,13 +1,17 @@
 import { Dimensions, Image, Platform, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react';
 // Context
-import { useTheme } from '../../context/ThemeContext';
+import { useStoreContext } from '../../context/Context';
 // Icons
-import { FontAwesome6, FontAwesome, Octicons, MaterialIcons, Feather, AntDesign, Ionicons, Fontisto, MaterialCommunityIcons } from '@expo/vector-icons';
-// Components
-import StoryCard from '../../components/home/StoryCard';
+import {
+  FontAwesome6, FontAwesome, Octicons, MaterialIcons,
+  Feather, AntDesign, Ionicons, Fontisto, MaterialCommunityIcons
+} from '@expo/vector-icons';
 // Top tab
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { router } from 'expo-router';
+// Components
+import StoryCard from '../../components/home/StoryCard';
 import Post from '../Profile/Post';
 import Reel from '../Profile/Reel';
 import Tag from '../Profile/Tag';
@@ -17,68 +21,71 @@ interface Props {
   focused: boolean
 }
 const Profile = () => {
-  const { theme } = useTheme();
+  const { router, useAuthSelector, useThemeSelector } = useStoreContext();
+  const { isAuthenticated, user, posts } = useAuthSelector;
+  const { theme } = useThemeSelector;
+  const color = theme.colors;
   return (
-    <SafeAreaView style={[styles.safeView, { backgroundColor: theme.bgc }]}>
+    <SafeAreaView style={[styles.safeView, { backgroundColor: color.background }]}>
 
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
           <TouchableOpacity>
-            <Text style={[styles.userName, { color: theme.text }]}>phbatuan</Text>
+            <Text style={[styles.userName, { color: color.text }]}>phbatuan</Text>
           </TouchableOpacity>
-  
+
           <View style={styles.wrap1}>
             <TouchableOpacity style={styles.iconWrap}>
-              <FontAwesome6 name="threads" size={25} color={theme.text} />
+              <FontAwesome6 name="threads" size={25} color={color.text} />
             </TouchableOpacity>
             <TouchableOpacity style={styles.iconWrap}>
-              <Octicons name="diff-added" size={25} color={theme.text} />
+              <Octicons name="diff-added" size={25} color={color.text} />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.iconWrap}>
-              <Feather name="menu" size={27} color={theme.text} />
+            <TouchableOpacity style={styles.iconWrap} onPress={() => router.push('Profile/Setting')}>
+              <Feather name="menu" size={27} color={color.text} />
             </TouchableOpacity>
           </View>
-  
+
         </View>
-  
-        <View style={styles.container2}>
-  
-          <View style={styles.wrap2a}>
+
+        <View style={styles.userInfoContainer}>
+
+          <View style={styles.imgContainer}>
             <TouchableOpacity>
-              <Image style={styles.img2} source={require('../../assets/home/image/TuanPham.jpg')} resizeMode='cover' />
+              <Image style={styles.userImg} source={require('../../assets/home/image/TuanPham.jpg')} resizeMode='cover' />
             </TouchableOpacity>
-            <Text style={[styles.text2a, { color: theme.text }]}>Tuan Pham</Text>
+            <Text style={[styles.userNameText, { color: color.text }]}>Tuan Pham</Text>
           </View>
-  
-          <View style={styles.wrap2b}>
-            <View style={styles.box2}>
-              <Text style={[styles.number2, { color: theme.text }]}>99</Text>
-              <Text style={[styles.text2b, { color: theme.text }]}>Posts</Text>
+
+          <View style={styles.rightContainer}>
+            <View style={styles.wrap}>
+              <Text style={[styles.number2, { color: color.text }]}>99</Text>
+              <Text style={[styles.text2b, { color: color.text }]}>Posts</Text>
             </View>
-            <View style={styles.box2}>
-              <Text style={[styles.number2, { color: theme.text }]}>753K</Text>
-              <Text style={[styles.text2b, { color: theme.text }]}>Follower</Text>
+            <View style={styles.wrap}>
+              <Text style={[styles.number2, { color: color.text }]}>753K</Text>
+              <Text style={[styles.text2b, { color: color.text }]}>Follower</Text>
             </View>
-            <View style={styles.box2}>
-              <Text style={[styles.number2, { color: theme.text }]}>845</Text>
-              <Text style={[styles.text2b, { color: theme.text }]}>Following</Text>
+            <View style={styles.wrap}>
+              <Text style={[styles.number2, { color: color.text }]}>845</Text>
+              <Text style={[styles.text2b, { color: color.text }]}>Following</Text>
             </View>
-  
+
           </View>
-  
+
         </View>
-  
-        <View style={styles.container3}>
-          <TouchableOpacity style={[styles.wrap3, {backgroundColor: theme.text}]}>
-            <Text style={{ fontSize: 12, fontWeight: 'bold', color: theme.bgc }}>Modify profile</Text>
+
+        <View style={styles.modifyContainer}>
+          <TouchableOpacity style={[styles.wrap3, { backgroundColor: color.text }]}>
+            <Text style={{ fontSize: 12, fontWeight: 'bold', color: color.background }}>Modify profile</Text>
           </TouchableOpacity>
-  
-          <TouchableOpacity style={[styles.wrap3, {backgroundColor: theme.text}]}>
-            <Text style={{ fontSize: 12, fontWeight: 'bold', color: theme.bgc }}>Share profile</Text>
+
+          <TouchableOpacity style={[styles.wrap3, { backgroundColor: color.text }]}>
+            <Text style={{ fontSize: 12, fontWeight: 'bold', color: color.background }}>Share profile</Text>
           </TouchableOpacity>
         </View>
-  
-        <View style={styles.container4}>
+
+        <View style={styles.storyContainer}>
           <ScrollView horizontal={true} >
             <StoryCard
               img={require('../../assets/home/image/TuanPham.jpg')}
@@ -102,60 +109,60 @@ const Profile = () => {
             />
           </ScrollView>
         </View>
-  
-        <View style={styles.container5}>
-          <TopTab.Navigator
-            screenOptions={() => ({
-              tabBarActiveTintColor: theme.text,
-              tabBarShowLabel: false,
-              swipeEnabled: false,
-              tabBarStyle: {
-                backgroundColor: theme.bgc,
+
+        {/* <View style={styles.container5}> */}
+        <TopTab.Navigator
+          screenOptions={() => ({
+            tabBarActiveTintColor: color.text,
+            tabBarShowLabel: false,
+            swipeEnabled: false,
+            tabBarStyle: {
+              backgroundColor: color.background,
+            },
+            tabBarIconStyle: {
+              alignItems: 'center',
+              justifyContent: 'center',
+            }
+          })}
+        >
+          <TopTab.Screen
+            name="Post"
+            component={Post}
+            options={{
+              title: 'Post',
+              tabBarIcon(props: Props) {
+                return (
+                  // <AntDesign name='appstore-o' size={20} color={props.focused ? color.text : 'gray'} />
+                  <MaterialCommunityIcons name="grid" size={24} color={props.focused ? color.text : 'gray'} />
+                );
               },
-              tabBarIconStyle: {
-                alignItems: 'center',
-                justifyContent: 'center',
-              }
-            })}
-          >
-            <TopTab.Screen
-              name="Post"
-              component={Post}
-              options={{
-                title: 'Post',
-                tabBarIcon(props: Props) {
-                  return (
-                    // <AntDesign name='appstore-o' size={20} color={props.focused ? theme.text : 'gray'} />
-                    <MaterialCommunityIcons name="grid" size={24} color={props.focused ? theme.text : 'gray'} />
-                  );
-                },
-              }} />
-            <TopTab.Screen
-              name="Reel"
-              component={Reel}
-              options={{
-                title: 'Reel',
-                tabBarIcon(props: Props) {
-                  return (
-                    <FontAwesome name='film' size={20} color={props.focused ? theme.text : 'gray'} />
-                  );
-                },
-  
-              }} />
-            <TopTab.Screen
-              name="Tag"
-              component={Tag}
-              options={{
-                title: 'Tag',
-                tabBarIcon(props: Props) {
-                  return (
-                    <Fontisto name='hashtag' size={20} color={props.focused ? theme.text : 'gray'} />
-                  );
-                },
-  
-              }} />
-          </TopTab.Navigator>
-        </View>
+            }} />
+          <TopTab.Screen
+            name="Reel"
+            component={Reel}
+            options={{
+              title: 'Reel',
+              tabBarIcon(props: Props) {
+                return (
+                  <FontAwesome name='film' size={20} color={props.focused ? color.text : 'gray'} />
+                );
+              },
+
+            }} />
+          <TopTab.Screen
+            name="Tag"
+            component={Tag}
+            options={{
+              title: 'Tag',
+              tabBarIcon(props: Props) {
+                return (
+                  <Fontisto name='hashtag' size={20} color={props.focused ? color.text : 'gray'} />
+                );
+              },
+
+            }} />
+        </TopTab.Navigator>
+        {/* </View> */}
       </ScrollView>
 
     </SafeAreaView>
@@ -206,7 +213,7 @@ const styles = StyleSheet.create({
   },
 
 
-  container2: {
+  userInfoContainer: {
     height: 140,
     width: '100%',
     flexDirection: 'row',
@@ -216,7 +223,7 @@ const styles = StyleSheet.create({
     marginTop: 10
   },
 
-  wrap2a: {
+  imgContainer: {
     height: '100%',
     width: 100,
     // borderWidth: 1,
@@ -224,17 +231,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     // justifyContent: 'center'
   },
-  img2: {
+  userImg: {
     height: 80,
     width: 80,
     borderRadius: 50
   },
-  text2a: {
+  userNameText: {
     fontSize: 13,
     fontWeight: 'bold',
   },
 
-  wrap2b: {
+  rightContainer: {
     height: 'auto',
     width: 220,
     // borderWidth: 1,
@@ -243,7 +250,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around'
   },
 
-  box2: {
+  wrap: {
     height: 100,
     width: 70,
     // borderWidth: 1,
@@ -260,7 +267,7 @@ const styles = StyleSheet.create({
   },
 
 
-  container3: {
+  modifyContainer: {
     height: 30,
     width: '100%',
     // borderWidth: 1,
@@ -280,7 +287,7 @@ const styles = StyleSheet.create({
   },
 
 
-  container4: {
+  storyContainer: {
     height: 110,
     width: '100%',
     marginTop: 15,
@@ -288,7 +295,7 @@ const styles = StyleSheet.create({
   },
 
   container5: {
-    height: 700,
+    height: 'auto',
     width: '100%'
   }
 })

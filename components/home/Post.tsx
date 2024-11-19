@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 // Icons
 import { Entypo, FontAwesome5, FontAwesome, Ionicons, Feather, AntDesign } from '@expo/vector-icons';
 // Context
-import { useTheme } from '../../context/ThemeContext';
+import { useStoreContext } from '../../context/Context';
 
 interface Props{
    userImg: any,
@@ -12,14 +12,17 @@ interface Props{
    caption: string,
 }
 const Post = (props: Props) => {
-   // Theme
-   const { theme } = useTheme();
+   // Redux
+   const { router, useAuthSelector, useThemeSelector } = useStoreContext();
+   const { isAuthenticated, user, posts } = useAuthSelector;
+   const { theme } = useThemeSelector;
+   const color = theme.colors;
    // handle heart
    const [heart, setHeart] = useState('hearto');
-   const [color, setColor] = useState(theme.text);
+   const [colors, setColor] = useState(color.text);
    const handleHeart = () => {
-      setHeart(heart === 'hearto' ? 'heart' : 'hearto');
-      setColor(color === theme.text ? 'red' : theme.text);
+      setHeart(heart === 'heart' ? 'hearto' : 'heart');
+      setColor(colors === color.text ? 'red' : color.text);
    };
    // handle save post
    const [save, setSave] = useState('bookmark-o');
@@ -33,40 +36,40 @@ const Post = (props: Props) => {
          <View style={styles.container1}>
             <TouchableOpacity style={styles.wrap1}>
                <Image style={styles.img1} source={props.userImg} resizeMode='cover' />
-               <Text style={[styles.text1, { color: theme.text }]}>{props.userName}</Text>
+               <Text style={[styles.text1, { color: color.text }]}>{props.userName}</Text>
             </TouchableOpacity>
             <TouchableOpacity >
-               <Entypo name="dots-three-vertical" size={17} color={theme.text} />
+               <Entypo name="dots-three-vertical" size={17} color={color.text} />
             </TouchableOpacity>
          </View>
 
-         <Pressable onLongPress={handleHeart}>
+         <Pressable>
             <Image style={styles.post} source={props.img} resizeMode='cover' />
          </Pressable>
 
          <View style={styles.container2}>
             <View style={styles.wrap2}>
                <TouchableOpacity onPress={handleHeart}>
-                  <AntDesign name={heart} size={24} color={color} />
+                  <AntDesign name={heart} size={24} color={colors} />
                </TouchableOpacity>
 
                <TouchableOpacity>
-                  <Ionicons name="chatbubble-outline" size={24} color={theme.text} />
+                  <Ionicons name="chatbubble-outline" size={24} color={color.text} />
                </TouchableOpacity>
 
                <TouchableOpacity>
-                  <Feather name="send" size={24} color={theme.text} />
+                  <Feather name="send" size={24} color={color.text} />
                </TouchableOpacity>
             </View>
 
             <TouchableOpacity style={{paddingRight: 5}} onPress={handleSave}>
-               <FontAwesome name={save} size={24} color={theme.text} />
+               <FontAwesome name={save} size={24} color={color.text} />
             </TouchableOpacity>
          </View>
 
          <View style={styles.container3}>
-            <Text style={[styles.text3a, { color: theme.text }]}>{props.userName}</Text>
-            <Text style={[styles.text3b, { color: theme.text }]}>{props.caption}</Text>
+            <Text style={[styles.text3a, { color: color.text }]}>{props.userName}</Text>
+            <Text style={[styles.text3b, { color: color.text }]}>{props.caption}</Text>
          </View>
       </View>
    )
@@ -122,12 +125,15 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      paddingHorizontal: 10,
+      paddingRight: 10,
+      // paddingHorizontal: 10,
+      // borderWidth: 1
    },
 
    wrap2: {
       height: '100%',
-      width: 120,
+      width: 140,
+      // paddingLeft: 7,
       // borderWidth: 1,
       flexDirection: 'row',
       alignItems: 'center',
@@ -139,7 +145,7 @@ const styles = StyleSheet.create({
       height: 'auto',
       width: '100%',
       // borderWidth: 1,
-      paddingLeft: 17,
+      paddingLeft: 10,
       flexDirection: 'row'
    },
    text3a: {

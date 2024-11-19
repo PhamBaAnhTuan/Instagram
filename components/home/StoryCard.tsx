@@ -1,17 +1,21 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react';
-import { useTheme } from '../../context/ThemeContext';
+// Context
+import { useStoreContext } from '../../context/Context';
 
 interface Props{
    img: any,
    userName: string,
 }
 const StoryCard = (props: Props) => {
-   const { theme } = useTheme();
+   // Redux
+   const { useThemeSelector } = useStoreContext();
+   const { theme } = useThemeSelector;
+   const color = theme.colors;
    return (
       <TouchableOpacity style={styles.container}>
          <View style={styles.imgWrap}><Image style={styles.img} source={props.img} resizeMode='cover' /></View>
-         <Text style={[styles.text, {color: theme.text}]}>{props.userName}</Text>
+         <Text style={[styles.text, {color: color.text}]}>{props.userName}</Text>
       </TouchableOpacity>
    )
 }

@@ -4,12 +4,15 @@ import { Stack, Tabs } from 'expo-router';
 // Icons
 import { Ionicons, Octicons, Foundation, Feather, FontAwesome } from '@expo/vector-icons';
 // Context
-import { useTheme } from '../../context/ThemeContext';
+import { useStoreContext } from '../../context/Context';
 
 const Layout = () => {
 
-  const {theme} = useTheme();
-  
+  const { useAuthSelector, useThemeSelector } = useStoreContext();
+
+  const {theme} = useThemeSelector;
+  const color = theme.colors;
+
   interface TabBarProps {
     focused: boolean;
     color: string;
@@ -21,24 +24,24 @@ const Layout = () => {
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveBackgroundColor: theme.bgc,
-        tabBarInactiveBackgroundColor: theme.bgc,
+        tabBarActiveBackgroundColor: color.background,
+        tabBarInactiveBackgroundColor: color.background,
         tabBarInactiveTintColor: 'gray',
-        tabBarLabelStyle:{
+        tabBarLabelStyle: {
           fontSize: 10,
           fontWeight: 'bold',
           marginBottom: 3,
         },
         tabBarShowLabel: false,
 
-        tabBarIconStyle:{
-         paddingBottom: 50,
-         // borderWidth: 1
+        tabBarIconStyle: {
+          paddingBottom: 50,
+          // borderWidth: 1
         },
-        tabBarActiveTintColor: theme.text,
-        tabBarStyle:{
+        tabBarActiveTintColor: color.text,
+        tabBarStyle: {
           height: 90,
-          borderColor: theme.bgc
+          borderColor: color.background
         }
       }}
     >
@@ -51,7 +54,7 @@ const Layout = () => {
               <Foundation
                 name={'home'}
                 size={30}
-                color={props.focused ? theme.text : 'gray'}
+                color={props.focused ? color.text : 'gray'}
               />
             );
           }
@@ -66,7 +69,7 @@ const Layout = () => {
               <Feather
                 name={'search'}
                 size={24}
-                color={props.focused ? theme.text : 'gray'}
+                color={props.focused ? color.text : 'gray'}
               />
             );
           }
@@ -81,7 +84,7 @@ const Layout = () => {
               <Octicons
                 name={'diff-added'}
                 size={24}
-                color={props.focused ? theme.text : 'gray'}
+                color={props.focused ? color.text : 'gray'}
               />
             );
           }
@@ -96,7 +99,7 @@ const Layout = () => {
               <FontAwesome
                 name={'film'}
                 size={21}
-                color={props.focused ? theme.text : 'gray'}
+                color={props.focused ? color.text : 'gray'}
               />
             );
           }
@@ -111,7 +114,7 @@ const Layout = () => {
               <Ionicons
                 name={'person'}
                 size={24}
-                color={props.focused ? theme.text : 'gray'}
+                color={props.focused ? color.text : 'gray'}
               />
             );
           }

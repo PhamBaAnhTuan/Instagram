@@ -3,11 +3,14 @@ import React, { useState } from 'react';
 // Icons
 import { Ionicons, AntDesign, FontAwesome, FontAwesome6, Feather, Entypo } from '@expo/vector-icons';
 // Context
-import { useTheme } from '../../context/ThemeContext';
+import { useStoreContext } from '../../context/Context';
 
 const Reel = () => {
-  // Theme
-  const {theme} = useTheme();
+  // Redux
+  const { router, useAuthSelector, useThemeSelector } = useStoreContext();
+  const { isAuthenticated, user, posts } = useAuthSelector;
+  const { theme } = useThemeSelector;
+  const color = theme.colors;
   // Handle follow
   const [follow, setFollow] = useState('Follow');
   const setFL = () => {
@@ -17,10 +20,10 @@ const Reel = () => {
   };
   // Handle heart
   const [heart, setHeart] = useState('hearto');
-  const [color, setColor] = useState(theme.text);
+  const [colors, setColors] = useState(color.text);
   const handleHeart = () => {
-    setHeart(heart === 'hearto' ? 'heart' : 'hearto');
-    setColor(color === theme.text ? 'red' : theme.text);
+    setHeart(heart === 'heart' ? 'hearto' : 'heart');
+    setColors(colors === color.text ? 'red' : color.text);
   };
   const arr = [
     { author: 'TuanPham', like: 999, comment: 753, share: 94, music: 'band 4 band', caption: 'We can go band 4 band. Fack that we can go M 4 M!' },
@@ -29,29 +32,27 @@ const Reel = () => {
     { author: 'Youngz Boiz', like: 835, comment: 532, share: 86, music: 'Leona Messi', caption: 'We can go band 4 band.\nFack that we can go M 4M' }
   ];
   const renderItem = ({ item }: { item: any }) => (
-    <View style={styles.container1}>
-      <TouchableOpacity style={styles.personIcon}>
-        <Feather name="camera" size={24} color={theme.text} />
-      </TouchableOpacity>
+    <View style={[styles.reelContainer, { backgroundColor: color.background }]}>
+
 
       <View style={styles.navbarInterAct}>
         <TouchableOpacity style={styles.likeWrap} onPress={handleHeart}>
-          <AntDesign name={heart} size={25} color={color} />
-          <Text style={[styles.text1, {color: theme.text}]} >{item.like}</Text>
+          <AntDesign name={heart} size={25} color={colors} />
+          <Text style={[styles.text1, { color: color.text }]} >{item.like}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.likeWrap}>
-          <FontAwesome6 name="comment-alt" size={25} color={theme.text} />
-          <Text style={[styles.text1, {color: theme.text}]} >{item.comment}</Text>
+          <FontAwesome6 name="comment-alt" size={25} color={color.text} />
+          <Text style={[styles.text1, { color: color.text }]} >{item.comment}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.likeWrap}>
-          <Feather name="send" size={25} color={theme.text} />
-          <Text style={[styles.text1, {color: theme.text}]} >{item.share}</Text>
+          <Feather name="send" size={25} color={color.text} />
+          <Text style={[styles.text1, { color: color.text }]} >{item.share}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.likeWrap}>
-          <Entypo name="dots-three-vertical" size={20} color={theme.text} />
+          <Entypo name="dots-three-vertical" size={20} color={color.text} />
         </TouchableOpacity>
       </View>
 
@@ -64,25 +65,25 @@ const Reel = () => {
             </TouchableOpacity>
 
             <TouchableOpacity>
-              <Text style={{ fontSize: 13, fontWeight: 'bold', color: theme.text, marginLeft: 10 }}>{item.author}</Text>
+              <Text style={{ fontSize: 13, fontWeight: 'bold', color: color.text, marginLeft: 10 }}>{item.author}</Text>
             </TouchableOpacity>
           </View>
 
-          <TouchableOpacity style={[styles.flWrap, {borderColor: theme.text}]} onPress={setFL}>
-            <Text style={{ fontSize: 11, color: theme.text }}>{follow}</Text>
+          <TouchableOpacity style={[styles.flWrap, { borderColor: color.text }]} onPress={setFL}>
+            <Text style={{ fontSize: 11, color: color.text }}>{follow}</Text>
           </TouchableOpacity>
         </View>
 
         <View style={styles.captionWrap}>
-          <Text style={{ fontSize: 13, fontWeight: '400', color: theme.text }}>{item.caption}</Text>
+          <Text style={{ fontSize: 13, fontWeight: '400', color: color.text }}>{item.caption}</Text>
         </View>
 
       </View>
 
       <View style={styles.musicWrap}>
         <TouchableOpacity style={styles.musicBox}>
-          <FontAwesome name="music" size={12} color={theme.text} />
-          <Text style={{ fontSize: 10, fontWeight: 'bold', marginLeft: 10, color: theme.text }}>{item.music}</Text>
+          <FontAwesome name="music" size={12} color={color.text} />
+          <Text style={{ fontSize: 10, fontWeight: 'bold', marginLeft: 10, color: color.text }}>{item.music}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity>
@@ -93,7 +94,10 @@ const Reel = () => {
   );
 
   return (
-    <SafeAreaView style={[styles.safeView, {backgroundColor: theme.bgc}]}>
+    <SafeAreaView style={[styles.safeView, { backgroundColor: color.background }]}>
+      <TouchableOpacity style={styles.personIcon}>
+        <Feather name="camera" size={24} color={color.text} />
+      </TouchableOpacity>
       <FlatList
         data={arr}
         renderItem={renderItem}
@@ -116,20 +120,23 @@ const styles = StyleSheet.create({
   },
 
 
-  container1: {
+  reelContainer: {
     height: Dimensions.get('screen').height - 127,
     width: '100%',
     backgroundColor: 'lightgray'
   },
 
   personIcon: {
+    zIndex: 1,
     position: 'absolute',
-    right: 10,
-    top: 10,
+    right: 15,
+    top: 45,
     alignSelf: 'flex-end',
+    alignItems: 'center',
     justifyContent: 'center',
     height: 30,
-    width: 30
+    width: 30,
+    // borderWidth: 1
   },
 
 
